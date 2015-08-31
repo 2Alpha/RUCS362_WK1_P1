@@ -18,10 +18,11 @@ const string FILE_1_NAME = "MEDICAL.txt";
 
 int main()
 {
+
+	bool arrayFull = false;
+
 	ProgramDescription();
 	ValidateDataFile1();
-
-	
 
 
 	system("PAUSE");
@@ -42,14 +43,25 @@ void ProgramDescription()
 void ValidateDataFile1()
 {
 	ifstream inputFile1;
+	char planType;
+
 	inputFile1.open(FILE_1_NAME);
+
+	bool oArrayFull = false;
+	bool fArrayFull = false;
+
+	int oCounter = 0;
+	int fCounter = 0;
+
+	float employeeOnly[MAX_ENTRIES];
+	float familyplan[MAX_ENTRIES]; 
 
 	//check for error  
 	if (inputFile1.fail())
 	{
 		cout << endl;
 		cout << "Uh Oh!!" << endl; // As my 2 year old son likes to say when something isn't right 
-		cerr << "Error Opening File named \"" << FILE_1_NAME << "\""<< endl;
+		cerr << "Error Opening File named \"" << FILE_1_NAME << "\"" << endl;
 		system("PAUSE");
 		exit(5);
 	}
@@ -63,10 +75,51 @@ void ValidateDataFile1()
 
 
 
-}
+	while (inputFile1 && !oArrayFull && !fArrayFull )       // successful read (data on line)
+	{                                       // and array not full on last pass
 
-char SortDataByPlan()
-{
-	for (int i = 0; i < 3; ++i)
-		fin >> MyEntry[i];
+		//if (count < MAX_ENTRIES)
+		{
+			inputFile1 >> planType;  // read age into array
+
+			if (planType == 'O' && oCounter < MAX_ENTRIES)
+			{
+				for (int index = 0; index < MAX_ENTRIES; index++)
+				{
+					cout << "Single" << endl;
+					inputFile1 >> employeeOnly[oCounter];
+					oCounter++;
+
+					if (oCounter >= MAX_ENTRIES)
+					{
+						oArrayFull = true; 
+					}
+				}
+
+			}
+
+			else
+			{
+				for (int index = 0; index < MAX_ENTRIES; index++)
+				{
+					cout << "Family" << endl;
+					inputFile1 >> familyplan[fCounter];
+					fCounter++;
+
+					if (fCounter >= MAX_ENTRIES)
+					{
+						fArrayFull = true;
+					}
+				}
+
+			//ount++;                            // increment patient count
+			//patientFile.ignore(100, '\n');     // skips remaining data on line
+
+			//patientFile >> patientId >> sex;    // try to read data on next line
+		}
+
+		inputFile1.close();
+
+	}
+
 }
