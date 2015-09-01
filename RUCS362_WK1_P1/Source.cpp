@@ -54,7 +54,7 @@ void ValidateDataFile1()
 	int fCounter = 0;
 
 	float employeeOnly[MAX_ENTRIES];
-	float familyplan[MAX_ENTRIES]; 
+	float familyplan[MAX_ENTRIES];
 
 	//check for error  
 	if (inputFile1.fail())
@@ -75,42 +75,40 @@ void ValidateDataFile1()
 
 
 
-	while (inputFile1 && !oArrayFull && !fArrayFull )       // successful read (data on line)
+	while (inputFile1)       // successful read (data on line)
 	{                                       // and array not full on last pass
 
-		//if (count < MAX_ENTRIES)
+
+		inputFile1 >> planType;  // read age into array
+
+		if (planType == 'O' && oCounter < MAX_ENTRIES)
 		{
-			inputFile1 >> planType;  // read age into array
 
-			if (planType == 'O' && oCounter < MAX_ENTRIES)
+			cout << "Single" << endl;
+			inputFile1 >> employeeOnly[oCounter];
+			oCounter++;
+			inputFile1.ignore(100, '\n');
+
+			if (oCounter >= MAX_ENTRIES)
 			{
-				for (int index = 0; index < MAX_ENTRIES; index++)
-				{
-					cout << "Single" << endl;
-					inputFile1 >> employeeOnly[oCounter];
-					oCounter++;
-
-					if (oCounter >= MAX_ENTRIES)
-					{
-						oArrayFull = true; 
-					}
-				}
-
+				oArrayFull = true;
 			}
 
-			else
-			{
-				for (int index = 0; index < MAX_ENTRIES; index++)
-				{
-					cout << "Family" << endl;
-					inputFile1 >> familyplan[fCounter];
-					fCounter++;
 
-					if (fCounter >= MAX_ENTRIES)
-					{
-						fArrayFull = true;
-					}
-				}
+		}
+
+		else
+		{
+
+			cout << "Family" << endl;
+			inputFile1 >> familyplan[fCounter];
+			fCounter++;
+			inputFile1.ignore(100, '\n');
+
+			if (fCounter >= MAX_ENTRIES)
+			{
+				fArrayFull = true;
+			}
 
 			//ount++;                            // increment patient count
 			//patientFile.ignore(100, '\n');     // skips remaining data on line
@@ -118,8 +116,18 @@ void ValidateDataFile1()
 			//patientFile >> patientId >> sex;    // try to read data on next line
 		}
 
-		inputFile1.close();
 
 	}
+
+	inputFile1.close();
+
+	int patient;
+	for (patient = 0; patient < patientCount; patient++)
+
+		if (patientAges[patient] <= MAX_PEDIATRIC_AGE)
+		{
+			cout << patientAges[patient] << endl;
+			kidCount++;
+		}
 
 }
