@@ -122,12 +122,12 @@ void ValidateDataFile1()
 	inputFile1.close();
 
 	int patient;
-	for (patient = 0; patient < patientCount; patient++)
+	for (patient = 0; patient < oCounter; patient++)
 
-		if (patientAges[patient] <= MAX_PEDIATRIC_AGE)
 		{
-			cout << patientAges[patient] << endl;
-			kidCount++;
+			cout << endl; 
+			cout << employeeOnly[patient] << endl;
+			patient++;
 		}
 
 }
