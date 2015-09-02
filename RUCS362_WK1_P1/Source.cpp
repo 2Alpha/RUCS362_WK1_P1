@@ -10,12 +10,16 @@ using namespace std;
 
 void ProgramDescription();
 void readDataFile1(float[], float[], int&, int&);
-float calcArrayAverage(float[], )
+float calcArrayAverage(float[], int sizeOfArray);
+float highestNumInArray(float[], int sizeOfArray);
+int howManyAboveAverage(float[], int sizeOfArray, int arrayAverage);
 
-void EmpOnlySummary(int numOfEntries);
+void EmpOnlySummary(float[], int sizeOfArray);
+void famPlanSummary(float[], int sizeOfArray);
+void displaySectionBreak();
 
 
-const int MAX_ENTRIES = 1000;
+const int MAX_ENTRIES = 4;
 
 const string FILE_1_NAME = "MEDICAL.txt"; 
 
@@ -30,19 +34,16 @@ int main()
 	int famPlanCounter;
 
 	ProgramDescription();
-	//ValidateDataFile1();
+
 
 	readDataFile1(employeeOnlyList, familyPlanList, EmpOnlyCounter, famPlanCounter);
-	EmpOnlySummary(EmpOnlyCounter);
+	EmpOnlySummary(employeeOnlyList, EmpOnlyCounter);
+	displaySectionBreak();
+	famPlanSummary(familyPlanList, famPlanCounter);
+	
+	
 
 
-	//for (int patient = 0; patient < EmpOnlyCounter; patient++){
-	//	cout << employeeOnlyList[patient] << endl;
-	//}
-
-	//for (int patient = 0; patient < famPlanCounter; patient++){
-	//	cout << familyPlanList[patient] << endl;
-	//}
 
 
 	system("PAUSE");
@@ -108,15 +109,16 @@ void readDataFile1(float empOnlyPlan[], float famPlan[], int& EmpOnlyCounter, in
 			if (EmpOnlyCounter >= MAX_ENTRIES)
 			{
 				oArrayFull = true;
+				cout << "Alert! Maximum number of Entries (" << MAX_ENTRIES << ") for Employee Only Plan has been reached" << endl << endl;;
 			}
 
 
 		}
 
-		else
+		else if (planType == 'F' && famPlanCounter < MAX_ENTRIES)
 		{
 
-			//cout << "Family" << endl;
+			
 			inputFile1 >> famPlan[famPlanCounter];
 			famPlanCounter++;
 			inputFile1.ignore(100, '\n');
@@ -124,6 +126,7 @@ void readDataFile1(float empOnlyPlan[], float famPlan[], int& EmpOnlyCounter, in
 			if (famPlanCounter >= MAX_ENTRIES)
 			{
 				fArrayFull = true;
+				cout << "Alert! Maximum number of Entries (" << MAX_ENTRIES << ") for Family Plan has been reached" << endl << endl;
 			}
 
 		}
@@ -136,12 +139,102 @@ void readDataFile1(float empOnlyPlan[], float famPlan[], int& EmpOnlyCounter, in
 
 }
 
-void EmpOnlySummary(int numOfEntries)
+void EmpOnlySummary(float empOnlyPlan[], int EmpOnlyCounter)
 {
-	if (numOfEntries > 0){
-		cout << "For " << numOfEntries << " employees with employee only coverage:" << endl;
+	float empOnlyPlanAverage,
+		empOnlyplanHgh;
+	
+	int empAboveAverage = 0;
+
+	if (EmpOnlyCounter > 0){
+		cout << "For " << EmpOnlyCounter << " employees with employee only coverage:" << endl;
+
+		empOnlyPlanAverage = calcArrayAverage(empOnlyPlan, EmpOnlyCounter);
+		empOnlyplanHgh = highestNumInArray(empOnlyPlan, EmpOnlyCounter);
+		empAboveAverage = howManyAboveAverage(empOnlyPlan, EmpOnlyCounter, empOnlyPlanAverage);
+		
+		cout << fixed << showpoint << setprecision(2);
+		cout << "      Average expenses were $" << setw(9) << empOnlyPlanAverage << endl;
+		cout << "      Highest expenses were $" << setw(9) << empOnlyplanHgh << endl;
+		cout << "      " << empAboveAverage << " Employee(s) expenses were above the average" << endl;
+	}
+
+	else cout << "There were NO employees with employee Only coverage." << endl;
+}
+
+
+
+void famPlanSummary(float famPlan[], int famPlanCounter)
+{
+	float famPlanAverage,
+		  famPlanHgh;
+
+	int famAboveAverage = 0;
+
+	if (famPlanCounter > 0){
+		cout << "For " << famPlanCounter << " employees with family coverage:" << endl;
+
+		famPlanAverage = calcArrayAverage(famPlan, famPlanCounter);
+		famPlanHgh = highestNumInArray(famPlan, famPlanCounter);
+		famAboveAverage = howManyAboveAverage(famPlan, famPlanCounter, famPlanAverage);
+
+		cout << fixed << showpoint << setprecision(2);
+		cout << "      Average expenses were $" << setw(9) << famPlanAverage << endl;
+		cout << "      Highest expenses were $" << setw(9) << famPlanHgh << endl;
+		cout << "      " << famAboveAverage << " Employee(s) expenses were above the average" << endl;
+	}
+
+	else cout << "There were NO employees with family Coverage." << endl;
+
+
+}
+
+float calcArrayAverage(float ArrayName[], int sizeOfArray)
+{
+	float sumOfArray = 0,
+	      averageOfArray = 0; 
+	
+
+	for (int index = 0; index < sizeOfArray; index++)
+	{
+		sumOfArray = sumOfArray + ArrayName[index];
+	}
+
+	averageOfArray = sumOfArray / sizeOfArray;
+	
+	return averageOfArray;
+}
+
+float highestNumInArray(float ArrayName[], int sizeOfArray)
+{
+	float highestValue = 0;
+
+	for (int index = 0; index < sizeOfArray; index++)
+	{
+		if (ArrayName[index] >  highestValue)
+			highestValue = ArrayName[index];
+	}
+	return highestValue;
+
+}
+
+int howManyAboveAverage(float ArrayName[], int sizeOfArray, int arrayAverage)
+{
+	int numAboveAverage = 0; 
+
+	for (int index = 0; index < sizeOfArray; index++)
+	{
+		if (ArrayName[index] >  arrayAverage)
+		{
+			numAboveAverage++;
+		}
 
 	}
 
-	else cout << "There were NO employees with family coverage." << endl;
+	return numAboveAverage;
+}
+
+void displaySectionBreak()
+{
+	cout << endl; 
 }
