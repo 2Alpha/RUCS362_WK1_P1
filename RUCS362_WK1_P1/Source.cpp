@@ -9,8 +9,11 @@
 using namespace std;
 
 void ProgramDescription();
-void ValidateDataFile1(); 
-char SortDataByPlan(); 
+void readDataFile1(float[], float[], int&, int&);
+float calcArrayAverage(float[], )
+
+void EmpOnlySummary(int numOfEntries);
+
 
 const int MAX_ENTRIES = 1000;
 
@@ -21,8 +24,25 @@ int main()
 
 	bool arrayFull = false;
 
+	float employeeOnlyList[MAX_ENTRIES];
+	float familyPlanList[MAX_ENTRIES];
+	int EmpOnlyCounter;
+	int famPlanCounter;
+
 	ProgramDescription();
-	ValidateDataFile1();
+	//ValidateDataFile1();
+
+	readDataFile1(employeeOnlyList, familyPlanList, EmpOnlyCounter, famPlanCounter);
+	EmpOnlySummary(EmpOnlyCounter);
+
+
+	//for (int patient = 0; patient < EmpOnlyCounter; patient++){
+	//	cout << employeeOnlyList[patient] << endl;
+	//}
+
+	//for (int patient = 0; patient < famPlanCounter; patient++){
+	//	cout << familyPlanList[patient] << endl;
+	//}
 
 
 	system("PAUSE");
@@ -40,23 +60,20 @@ void ProgramDescription()
 	cout << " 6. The highest expenses for Employees with Family Health Coverage" << endl;
 }
 
-void ValidateDataFile1()
+
+void readDataFile1(float empOnlyPlan[], float famPlan[], int& EmpOnlyCounter, int& famPlanCounter)
 {
 	ifstream inputFile1;
 	char planType;
 
-	inputFile1.open(FILE_1_NAME);
-
 	bool oArrayFull = false;
 	bool fArrayFull = false;
 
-	int oCounter = 0;
-	int fCounter = 0;
+	EmpOnlyCounter = 0;
+	famPlanCounter = 0;
 
-	float employeeOnly[MAX_ENTRIES];
-	float familyplan[MAX_ENTRIES];
+	inputFile1.open(FILE_1_NAME);
 
-	//check for error  
 	if (inputFile1.fail())
 	{
 		cout << endl;
@@ -74,22 +91,21 @@ void ValidateDataFile1()
 	}
 
 
-
 	while (inputFile1)       // successful read (data on line)
 	{                                       // and array not full on last pass
 
 
 		inputFile1 >> planType;  // read age into array
 
-		if (planType == 'O' && oCounter < MAX_ENTRIES)
+		if (planType == 'O' && EmpOnlyCounter < MAX_ENTRIES)
 		{
 
-			cout << "Single" << endl;
-			inputFile1 >> employeeOnly[oCounter];
-			oCounter++;
+			//cout << "Single" << endl;
+			inputFile1 >> empOnlyPlan[EmpOnlyCounter];
+			EmpOnlyCounter++;
 			inputFile1.ignore(100, '\n');
 
-			if (oCounter >= MAX_ENTRIES)
+			if (EmpOnlyCounter >= MAX_ENTRIES)
 			{
 				oArrayFull = true;
 			}
@@ -100,20 +116,16 @@ void ValidateDataFile1()
 		else
 		{
 
-			cout << "Family" << endl;
-			inputFile1 >> familyplan[fCounter];
-			fCounter++;
+			//cout << "Family" << endl;
+			inputFile1 >> famPlan[famPlanCounter];
+			famPlanCounter++;
 			inputFile1.ignore(100, '\n');
 
-			if (fCounter >= MAX_ENTRIES)
+			if (famPlanCounter >= MAX_ENTRIES)
 			{
 				fArrayFull = true;
 			}
 
-			//ount++;                            // increment patient count
-			//patientFile.ignore(100, '\n');     // skips remaining data on line
-
-			//patientFile >> patientId >> sex;    // try to read data on next line
 		}
 
 
@@ -121,13 +133,15 @@ void ValidateDataFile1()
 
 	inputFile1.close();
 
-	int patient;
-	for (patient = 0; patient < oCounter; patient++)
 
-		{
-			cout << endl; 
-			cout << employeeOnly[patient] << endl;
-			patient++;
-		}
+}
 
+void EmpOnlySummary(int numOfEntries)
+{
+	if (numOfEntries > 0){
+		cout << "For " << numOfEntries << " employees with employee only coverage:" << endl;
+
+	}
+
+	else cout << "There were NO employees with family coverage." << endl;
 }
